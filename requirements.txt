@@ -8,7 +8,7 @@ bs4==0.0.1
 streamlit==1.18.1
 streamlit-aggrid==0.3.3
 zipp==3.14.0
-tushare==1.2.84
+tushare==1.2.89
 requests==2.26.0
 webencodings==0.5.1
 jqdatasdk==1.8.11
