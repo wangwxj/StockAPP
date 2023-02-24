@@ -9,9 +9,14 @@ import html5lib
 from datetime import datetime
 import time
 import warnings
-import func
 import jqdatasdk
 from jqdatasdk import *
+import streamlit as st
+import numpy as np
+import altair as alt
+from datetime import *
+
+
 auth('15050410156','Ff787878789')
 warnings.filterwarnings("ignore")
 pd.set_option('display.max_rows',1000)
@@ -315,4 +320,63 @@ my_gante=pd.merge(get_gante_list,final,right_on="code",left_on="code",how="left"
 my_gante=my_gante.set_index(['code','name', 'reason', 'lianban', head[4], head[5], head[6], head[7],
        head[8], head[9], '▏']).reset_index()
 my_gante.insert(7,'|',"▏ ")
+
+
+st.set_page_config(
+    page_title="StockApp",
+    layout="wide"
+)
+
+def my_color(val):
+    if val>9:
+        color="lightcoral"
+    elif val<-9:
+        color="green"
+    elif 3.5<=val<9:    
+        color="orange"
+    elif -9<val<=-3.5:    
+        color="palegreen"
+    else:
+        color="white"    
+    return 'background-color: %s' % color
+
+df = my_gante
+ztri=[str(c) for c in df.columns]
+today=ztri[13]
+
+df=round(df.iloc[:,2:],1)
+
+st.sidebar.header("请在这里筛选:")
+reason1 = st.sidebar.multiselect(
+    "板块:",
+    options=df["reason"].unique(),
+    default=df["reason"].unique()
+)
+ 
+lianban1 = st.sidebar.multiselect(
+    "连板:",
+    options=df["lianban"].unique(),
+    default=df["lianban"].unique()
+)
+
+
+data = df.query(
+    "reason == @reason1 & lianban ==@lianban1"
+)
+
+pct = st.sidebar.slider('pct', -20.0, 20.0,(-20.0,20.0))
+
+data=data[(data[today]>=pct[0]) & (data[today]<=pct[1])]
+
+data=data.sort_values("lianban",ascending=False)
+
+head=[str(c) for c in data.columns]
+bar=data.groupby(["reason"])[head[3],head[4],head[7],head[8]].mean()
+st.bar_chart(bar,height=500)
+
+
+final=data\
+.style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
+.format("{:.1f}",subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])
+st.dataframe(final,height=50*len(data))
 
