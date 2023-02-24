@@ -1,27 +1,22 @@
+import streamlit as st
 import tushare as ts
-import pandas as pd
 import numpy as np
+import pandas as pd
+import altair as alt
 import datetime
+from datetime import *
 from bs4 import BeautifulSoup
 import re
 import requests
 import html5lib
 from datetime import datetime
-import time
-import warnings
 import jqdatasdk
 from jqdatasdk import *
-import streamlit as st
-import numpy as np
-import altair as alt
-from datetime import *
-
-
 auth('15050410156','Ff787878789')
-warnings.filterwarnings("ignore")
+
 pd.set_option('display.max_rows',1000)
 pd.set_option('display.max_columns',1000)
-pd.set_option('precision',2)
+
 pro = ts.pro_api('7791917f1a82bfedc20a7cc06d557c046333a49c987ff8d81f2bc8f7')
 end_date=datetime.today().strftime("%Y%m%d")
 trade_date= pro.trade_cal(exchange='', end_date=end_date,is_open='1').sort_values('cal_date')
@@ -30,11 +25,10 @@ end_trade_date=list(trade_date.cal_date)[-1]
 start_trade_date=list(trade_date.cal_date)[-7]
 
 
-def yesterday_data(stock,date):#昨日收盘数据获得
+def yesterday_data(stock,date):
     yestdf=pd.DataFrame()  
     dff=pd.DataFrame()  
     df=pd.DataFrame()  
-    #df=attribute_history(stock,count=1,unit='1d',fields="close")
     df=get_price(stock,count=1,end_date=date,panel=False,fields=['close','pre_close','high','low','open'])
     dff=df
     dff['code']=stock[0:6]
@@ -44,10 +38,9 @@ def yesterday_data(stock,date):#昨日收盘数据获得
     yestdf=yestdf
     return yestdf
 
-def get_stocklist(date):  #爬取板块数据
+def get_stocklist(date):
     df=pd.DataFrame()
     url='https://www.xilimao.com/zhangting/'+date+".html"
-    #print(url)
     res=requests.get(url)
     res.encoding="utf-8"
     soup = BeautifulSoup(res.text, features="html5lib")
@@ -85,13 +78,11 @@ def get_stocklist(date):  #爬取板块数据
     df=pd.DataFrame({"date":date,"code":code_list,"name":stock_list,
                          "pct":pct_list,"time":time_list,"reason":reason_list,"lianban":ban_list})
     df['code']=df['code'].astype(str)
-    '''df=df[~df.code.str.startswith('30')]
-    df=df[~df.code.str.startswith('688')]
-    df=df[~df.code.str.startswith('689')]'''
+ 
     df.lianban= df.lianban.astype(int)
     return df
     
-def get_code(val):#格式化数据
+def get_code(val):
 
     if val[0:2]=="00":
         code=".XSHE"
@@ -103,7 +94,7 @@ def get_code(val):#格式化数据
         code=".XSHG"
     return val+code
 
-def get_gongji(stocklist,date):#获得历史数据
+def get_gongji(stocklist,date):
     df=pd.DataFrame()  
     df=get_price(security=stocklist,end_date=date,count=3,panel=False,fields=['close','high', 'low', 'pre_close','open'])
     df["攻击"]=(df.high-df.open)/df.open*100
@@ -124,7 +115,7 @@ def get_gongji(stocklist,date):#获得历史数据
     
     return df
 
-def get_huitou(stocklist,date):#获得历史数据
+def get_huitou(stocklist,date):
     
     df=pd.DataFrame()  
     df=get_price(security=stocklist,end_date=date,count=3,panel=False,fields=['close','high', 'low', 'pre_close','open'])
@@ -144,7 +135,7 @@ def get_huitou(stocklist,date):#获得历史数据
     df["code"]=df.code.str[0:6]
     return df
 
-def get_gante(stocklist,date):#获得历史数据
+def get_gante(stocklist,date):
     
     df=pd.DataFrame()  
     df=get_price(security=stocklist,end_date=date,count=7,panel=False,fields=['close','high', 'low', 'pre_close','open'])
@@ -166,20 +157,7 @@ def get_gante(stocklist,date):#获得历史数据
 
     return df
 
-def my_color(val):#格式化数据，并增加阶段汇总值
-    if val>9:
-        color="lightcoral"
-    elif val<-9:
-        color="green"
-    elif 3.5<=val<9:    
-        color="orange"
-    elif -9<val<=-3.5:    
-        color="palegreen"
-    else:
-        color="white"    
-    return 'background-color: %s' % color
-
-def my_code(val):#格式化数据
+def my_code(val):
 
     if val[0:2]=="00":
         code=".XSHE"
@@ -191,7 +169,7 @@ def my_code(val):#格式化数据
         code=".XSHG"
     return val+code
 
-def get_jja(stock,date):  #竞价数据获得
+def get_jja(stock,date):
     jjpool=pd.DataFrame()  
     dff=pd.DataFrame()
     df=pd.DataFrame()
@@ -218,7 +196,7 @@ def block_data(blockdate):
     data_list=get_gante(list(block_list.code.apply(my_code)),blockdate)
     temp1=pd.merge(block_list,data_list,left_on="code",right_on="code",how="left")
     temp1=temp1.reset_index().drop('code2', axis=1, errors='ignore').iloc[:,1:]
-    return temp1#.sort_values("sum",ascending=False)
+    return temp1
 
 def jj_yest(block):
     jj_list=pd.DataFrame()
@@ -237,7 +215,7 @@ def jj_yest(block):
     temp2=temp2
     return temp2
 
-def get_jj(stock,date):  #竞价数据获得
+def get_jj(stock,date):
     
     jjpool=pd.DataFrame()  
     dff=pd.DataFrame()
@@ -315,12 +293,10 @@ head[-6]="b "+head[-6]
 final.columns=head
 final["▏"]="▏ "
 my_gante=pd.merge(get_gante_list,final,right_on="code",left_on="code",how="left")
-#my_gante=my_gante.set_index(['code','name', 'reason', 'lianban', 'b 02-07', 'b 02-06', 'b 02-03', 's 02-07',
-     #  's 02-06', 's 02-03', '▏']).reset_index()
 my_gante=my_gante.set_index(['code','name', 'reason', 'lianban', head[4], head[5], head[6], head[7],
        head[8], head[9], '▏']).reset_index()
 my_gante.insert(7,'|',"▏ ")
-
+my_gante.to_excel("block.xlsx")
 
 st.set_page_config(
     page_title="StockApp",
@@ -340,7 +316,8 @@ def my_color(val):
         color="white"    
     return 'background-color: %s' % color
 
-df = my_gante
+df = pd.read_excel("block.xlsx")
+
 ztri=[str(c) for c in df.columns]
 today=ztri[13]
 
@@ -379,4 +356,3 @@ final=data\
 .style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
 .format("{:.1f}",subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])
 st.dataframe(final,height=50*len(data))
-
