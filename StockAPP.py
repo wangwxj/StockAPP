@@ -346,6 +346,8 @@ data=data.sort_values("lianban",ascending=False)
 
 head=[str(c) for c in data.columns]
 bar=data.groupby(["reason"])[head[3],head[4],head[7],head[8]].mean()
+
+@st.cache(persist=True)
 st.bar_chart(bar,height=500)
 
 
