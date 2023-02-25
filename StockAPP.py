@@ -14,7 +14,7 @@ import jqdatasdk
 from jqdatasdk import *
 auth('15050410156','Ff787878789')
 
-
+print("teet")
 pd.set_option('display.max_rows',1000)
 pd.set_option('display.max_columns',1000)
 
