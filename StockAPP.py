@@ -293,8 +293,7 @@ my_gante=pd.merge(get_gante_list,final,right_on="code",left_on="code",how="left"
 my_gante=my_gante.set_index(['code','name', 'reason', 'lianban', head[4], head[5], head[6], head[7],
        head[8], head[9], '▏']).reset_index()
 my_gante.insert(7,'|',"▏ ")
-
-
+my_gante.to_excel("./block.xlsx")
 
 st.set_page_config(
     page_title="StockApp",
@@ -314,26 +313,28 @@ def my_color(val):
         color="white"    
     return 'background-color: %s' % color
 
-ztri=[str(c) for c in my_gante.columns]
+df = pd.read_excel("./block.xlsx")
+
+ztri=[str(c) for c in df.columns]
 today=ztri[13]
 
-my_gante=round(my_gante.iloc[:,2:],1)
+df=round(df.iloc[:,2:],1)
 
 st.sidebar.header("请在这里筛选:")
 reason1 = st.sidebar.multiselect(
     "板块:",
-    options=my_gante["reason"].unique(),
-    default=my_gante["reason"].unique()
+    options=df["reason"].unique(),
+    default=df["reason"].unique()
 )
  
 lianban1 = st.sidebar.multiselect(
     "连板:",
-    options=my_gante["lianban"].unique(),
-    default=my_gante["lianban"].unique()
+    options=df["lianban"].unique(),
+    default=df["lianban"].unique()
 )
 
 
-data = my_gante.query(
+data = df.query(
     "reason == @reason1 & lianban ==@lianban1"
 )
 
