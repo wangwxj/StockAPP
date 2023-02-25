@@ -293,7 +293,8 @@ my_gante=pd.merge(get_gante_list,final,right_on="code",left_on="code",how="left"
 my_gante=my_gante.set_index(['code','name', 'reason', 'lianban', head[4], head[5], head[6], head[7],
        head[8], head[9], '▏']).reset_index()
 my_gante.insert(7,'|',"▏ ")
-my_gante.to_excel("./block.xlsx")
+'my_gante.to_excel("./block.xlsx")'
+
 
 st.set_page_config(
     page_title="StockApp",
@@ -313,7 +314,8 @@ def my_color(val):
         color="white"    
     return 'background-color: %s' % color
 
-df = pd.read_excel("./block.xlsx")
+'df = pd.read_excel("./block.xlsx")'
+
 
 ztri=[str(c) for c in df.columns]
 today=ztri[13]
