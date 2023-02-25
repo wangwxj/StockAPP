@@ -14,10 +14,6 @@ import jqdatasdk
 from jqdatasdk import *
 auth('15050410156','Ff787878789')
 
-print("teet")
-pd.set_option('display.max_rows',1000)
-pd.set_option('display.max_columns',1000)
-
 pro = ts.pro_api('7791917f1a82bfedc20a7cc06d557c046333a49c987ff8d81f2bc8f7')
 end_date=datetime.today().strftime("%Y%m%d")
 trade_date= pro.trade_cal(exchange='', end_date=end_date,is_open='1').sort_values('cal_date')
