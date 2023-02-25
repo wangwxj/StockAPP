@@ -314,26 +314,26 @@ def my_color(val):
         color="white"    
     return 'background-color: %s' % color
 
-ztri=[str(c) for c in df.columns]
+ztri=[str(c) for c in my_gante.columns]
 today=ztri[13]
 
-df=round(df.iloc[:,2:],1)
+my_gante=round(my_gante.iloc[:,2:],1)
 
 st.sidebar.header("请在这里筛选:")
 reason1 = st.sidebar.multiselect(
     "板块:",
-    options=df["reason"].unique(),
-    default=df["reason"].unique()
+    options=my_gante["reason"].unique(),
+    default=my_gante["reason"].unique()
 )
  
 lianban1 = st.sidebar.multiselect(
     "连板:",
-    options=df["lianban"].unique(),
-    default=df["lianban"].unique()
+    options=my_gante["lianban"].unique(),
+    default=my_gante["lianban"].unique()
 )
 
 
-data = df.query(
+data = my_gante.query(
     "reason == @reason1 & lianban ==@lianban1"
 )
 
