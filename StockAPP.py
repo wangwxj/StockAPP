@@ -352,4 +352,3 @@ final=data\
 .style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
 .format("{:.1f}",subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])
 st.dataframe(final,height=50*len(data))
-@st.cache
