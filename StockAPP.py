@@ -14,6 +14,9 @@ import jqdatasdk
 from jqdatasdk import *
 auth('15050410156','Ff787878789')
 
+pd.set_option('display.max_rows',1000)
+pd.set_option('display.max_columns',1000)
+
 pro = ts.pro_api('7791917f1a82bfedc20a7cc06d557c046333a49c987ff8d81f2bc8f7')
 end_date=datetime.today().strftime("%Y%m%d")
 trade_date= pro.trade_cal(exchange='', end_date=end_date,is_open='1').sort_values('cal_date')
@@ -321,6 +324,7 @@ today=ztri[13]
 df=round(df.iloc[:,2:],1)
 
 st.sidebar.header("请在这里筛选:")
+
 reason1 = st.sidebar.multiselect(
     "板块:",
     options=df["reason"].unique(),
@@ -345,8 +349,19 @@ data=data[(data[today]>=pct[0]) & (data[today]<=pct[1])]
 data=data.sort_values("lianban",ascending=False)
 
 head=[str(c) for c in data.columns]
-bar=data.groupby(["reason"])[head[3],head[4],head[7],head[8]].mean()
-st.bar_chart(bar,height=500)
+source=data.groupby(["reason"])[head[3],head[4],head[5],head[7],head[8],head[9],].sum()
+source=source.stack().reset_index()
+source.columns=["reason","date","val"]
+
+Chart=alt.Chart(source).mark_bar().encode(
+    x='date',
+    y='sum(val)',
+    color="date",
+    column='reason'
+).interactive()
+
+st.altair_chart(Chart,use_container_width=False)
+
 
 final=data\
 .style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
