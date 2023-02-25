@@ -346,11 +346,10 @@ data=data.sort_values("lianban",ascending=False)
 
 head=[str(c) for c in data.columns]
 bar=data.groupby(["reason"])[head[3],head[4],head[7],head[8]].mean()
-
-@st.cache
 st.bar_chart(bar,height=500)
 
 final=data\
 .style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
 .format("{:.1f}",subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])
 st.dataframe(final,height=50*len(data))
+@st.cache
