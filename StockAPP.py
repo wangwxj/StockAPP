@@ -306,7 +306,7 @@ st.set_page_config(
 def my_color(val):
     if val>9:
         color="lightcoral"
-    elif val<-9:
+    elif val<=-9:
         color="green"
     elif 3.5<=val<9:    
         color="orange"
