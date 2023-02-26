@@ -325,6 +325,7 @@ df=round(df.iloc[:,2:],1)
 
 st.sidebar.header("请在这里筛选:")
 
+
 reason1 = st.sidebar.multiselect(
     "板块:",
     options=df["reason"].unique(),
@@ -364,9 +365,9 @@ Chart = alt.Chart(source).mark_bar().encode(
     width=alt.Step(16)  # controls width of bar.
 )
 
-st.altair_chart(Chart,use_container_width=False)
+st.altair_chart(Chart)
 
-
+data=data.reset_index().drop('index', axis=1, errors='ignore')
 final=data\
 .style.applymap(my_color,subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])\
 .format("{:.1f}",subset=data.columns.tolist()[3:6]+data.columns.tolist()[7:10]+data.columns.tolist()[11:])
