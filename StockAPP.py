@@ -358,7 +358,7 @@ Chart=alt.Chart(source).mark_bar(width=10).encode(
     y='sum(val)',
     color="date",
     column='reason'
-).configure_scale(bandPaddingInner=0.01)
+).configure_view(columnSpacing=5)
 
 st.altair_chart(Chart,use_container_width=False)
 
