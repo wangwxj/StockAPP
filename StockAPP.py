@@ -360,7 +360,7 @@ Chart=alt.Chart(source).mark_bar(width=10).encode(
     column='reason'
 ).configure_view(continuousWidth=400)
 
-st.altair_chart(Chart,use_container_width=False)
+st.altair_chart(Chart,use_container_width=True)
 
 
 final=data\
