@@ -349,17 +349,19 @@ data=data[(data[today]>=pct[0]) & (data[today]<=pct[1])]
 data=data.sort_values("lianban",ascending=False)
 
 head=[str(c) for c in data.columns]
-source=data.groupby(["reason"])[head[3],head[4],head[5],head[7],head[8],head[9],].sum()
+source=data.groupby(["reason"])[head[3],head[4],head[5],head[7],head[8],head[9]].sum()
 source=source.stack().reset_index()
 source.columns=["reason","date","val"]
+source.date=source.date.str[2:]
+
 
 Chart = alt.Chart(source).mark_bar().encode(
-    x='date',
+    x='reason',
     y='sum(val)',
-    column="reason",
-    color="date"
+    column="date",
+    color="reason"
 ).properties(
-    width=alt.Step(10)  # controls width of bar.
+    width=alt.Step(16)  # controls width of bar.
 )
 
 st.altair_chart(Chart,use_container_width=False)
