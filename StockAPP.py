@@ -353,7 +353,7 @@ source=data.groupby(["reason"])[head[3],head[4],head[5],head[7],head[8],head[9],
 source=source.stack().reset_index()
 source.columns=["reason","date","val"]
 
-Chart=alt.Chart(source).mark_bar(width=20).encode(
+Chart=alt.Chart(source).mark_bar(width=16).encode(
     x='date',
     y='sum(val)',
     color="date",
