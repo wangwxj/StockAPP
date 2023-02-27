@@ -360,7 +360,7 @@ Chart = alt.Chart(source).mark_bar().encode(
     x='reason',
     y='sum(val)',
     column="date",
-    color="reason"
+    color="date"
 ).properties(
     width=alt.Step(16)  # controls width of bar.
 )
