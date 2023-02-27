@@ -21,8 +21,10 @@ for j in range(len(i)-1):
     hotcode=df.query('pct_chg>9.5').ts_code
     df2=pro.daily(ts_code=','.join(hotcode), start_date=i[j+1],end_date=i[j+1],fields='ts_code,trade_date,pct_chg')
     df1 = pd.concat([df1,df2])
-
 df1['market']=df1.ts_code.str[0:2]
+
+name= pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,name,industry)
+df1=pd.merge(df1,name,left_on="ts_code",right_on="ts_code")
 dfffzb=df1.query('market=="00"|market=="60"')
 dfffcy=df1.query('market=="30"|market=="68"')
 
