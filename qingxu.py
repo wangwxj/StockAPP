@@ -26,8 +26,9 @@ df1['market']=df1.ts_code.str[0:2]
 name= pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,name,industry')
 df1=pd.merge(df1,name,left_on="ts_code",right_on="ts_code")
 dfffzb=df1.query('market=="00"|market=="60"')
+dfffzb=dfffzb.reset_index().drop('index', axis=1, errors='ignore')
 dfffcy=df1.query('market=="30"|market=="68"')
-
+dfffcy=dfffcy.reset_index().drop('index', axis=1, errors='ignore')
 col1, col2 = st.columns(2)
 
 with col1:
