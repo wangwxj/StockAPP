@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-trade_date1 = pro.trade_cal(exchange='',start_date='20230210',end_date=datetime.today().strftime("%Y%m%d")).query('is_open==1').sort_values("cal_date")
+trade_date1 = pro.trade_cal(exchange='',start_date='20230223',end_date=datetime.today().strftime("%Y%m%d")).query('is_open==1').sort_values("cal_date")
 i = list(trade_date1['cal_date'])
 df1=pd.DataFrame()
 for j in range(len(i)-1):
