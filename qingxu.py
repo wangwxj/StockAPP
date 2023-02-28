@@ -23,11 +23,11 @@ for j in range(len(i)-1):
     df1 = pd.concat([df1,df2])
 df1['market']=df1.ts_code.str[0:2]
 
-df1.to_csv("qingxi.csv",index=0,header=0,mode="a")
-df2=pd.read_csv("qingxi.csv")
+df1.to_csv(".\qingxi.csv",index=0,header=0,mode="a")
+df2=pd.read_csv(".\qingxi.csv")
 df2=df2.sort_values("trade_date",ascending=True)
 df2=df2.drop_duplicates(subset=['trade_date','ts_code'],keep='last')
-df2.to_csv("qingxi.csv",index=0)
+df2.to_csv(".\qingxi.csv",index=0)
 
 name= pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,name,industry')
 df2=pd.merge(df2,name,left_on="ts_code",right_on="ts_code")
