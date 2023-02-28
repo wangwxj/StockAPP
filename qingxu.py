@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-trade_date1 = pro.trade_cal(exchange='',start_date='20230101',end_date=datetime.today().strftime("%Y%m%d")).query('is_open==1').sort_values("cal_date")
+trade_date1 = pro.trade_cal(exchange='',start_date='20230210',end_date=datetime.today().strftime("%Y%m%d")).query('is_open==1').sort_values("cal_date")
 i = list(trade_date1['cal_date'])
 df1=pd.DataFrame()
 for j in range(len(i)-1):
@@ -23,11 +23,17 @@ for j in range(len(i)-1):
     df1 = pd.concat([df1,df2])
 df1['market']=df1.ts_code.str[0:2]
 
+df1.to_csv("qingxi.csv",index=0,header=0,mode="a")
+df2=pd.read_csv("qingxi.csv")
+df2=df2.sort_values("trade_date",ascending=True)
+df2=df2.drop_duplicates(subset=['trade_date','ts_code'],keep='last')
+df2.to_csv("qingxi.csv",index=0)
+
 name= pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,name,industry')
-df1=pd.merge(df1,name,left_on="ts_code",right_on="ts_code")
-dfffzb=df1.query('market=="00"|market=="60"')
+df2=pd.merge(df2,name,left_on="ts_code",right_on="ts_code")
+dfffzb=df2.query('market=="00"|market=="60"')
 dfffzb=dfffzb.reset_index().drop('index', axis=1, errors='ignore')
-dfffcy=df1.query('market=="30"|market=="68"')
+dfffcy=df2.query('market=="30"|market=="68"')
 dfffcy=dfffcy.reset_index().drop('index', axis=1, errors='ignore')
 col1, col2 = st.columns(2)
 
