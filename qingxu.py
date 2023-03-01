@@ -50,7 +50,7 @@ trade_year = st.sidebar.multiselect(
 
 
 data = dfffzb.query(
-    "year== @trade_year"
+    "month== @trade_year"
 )
 
 
