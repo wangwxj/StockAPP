@@ -52,7 +52,9 @@ data = dfffzb.query(
 )
 
 
-Chartzb = alt.Chart(data).mark_bar(color="red").encode(x=alt.X('trade_date:T', scale=alt.Scale(nice=False)),y='sum(pct_chg)')
+Chartzb = alt.Chart(data).mark_bar(color="red").encode(x=alt.X('trade_date:T', scale=alt.Scale(nice=False)),y='sum(pct_chg)').transform_filter(
+    'isValid(datum.price)'
+)
 
 
 Chartzb = Chartzb.configure_axis(title='')
