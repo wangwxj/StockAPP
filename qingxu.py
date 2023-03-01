@@ -44,8 +44,8 @@ dfffzb["month"]=dfffzb["trade_date"].dt.month
 
 trade_year = st.sidebar.multiselect(
     "日期:",
-    options=dfffzb["year"].unique(),
-    default=[2022,2023]
+    options=dfffzb["month"].unique(),
+    default=dfffzb["month"].unique()
 )
 
 
