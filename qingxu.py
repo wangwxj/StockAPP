@@ -42,8 +42,10 @@ dfffzb=dfffzb.reset_index().drop('index', axis=1, errors='ignore')
 dfffzb["year"]=dfffzb["trade_date"].dt.year
 dfffzb["month"]=dfffzb["trade_date"].dt.month
 
+import datetime
+now_date = datetime.date(2022, 12, 26)
 
-trade_year=st.sidebar.date_input("Start date",datetime.date(2022, 7, 6))
+trade_year=st.sidebar.date_input("Start date",now_date)
 
 data = dfffzb.query(
     "trade_date>= @trade_year"
