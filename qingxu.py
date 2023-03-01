@@ -43,7 +43,7 @@ dfffzb["year"]=dfffzb["trade_date"].dt.year
 dfffzb["month"]=dfffzb["trade_date"].dt.month
 
 
-trade_year=st.sidebar.date_input("Start date",datetime.date(2022,10,01))
+trade_year=st.sidebar.date_input("Start date",datetime.date(2022, 7, 6))
 
 data = dfffzb.query(
     "trade_date>= @trade_year"
