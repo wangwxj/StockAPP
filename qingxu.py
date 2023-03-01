@@ -42,15 +42,11 @@ dfffzb=dfffzb.reset_index().drop('index', axis=1, errors='ignore')
 dfffzb["year"]=dfffzb["trade_date"].dt.year
 dfffzb["month"]=dfffzb["trade_date"].dt.month
 
-trade_year = st.sidebar.multiselect(
-    "日期:",
-    options=dfffzb["month"].unique(),
-    default=dfffzb["month"].unique()
-)
 
+trade_year=st.sidebar.date_input("Start date",datetime.date(2022,10,01))
 
 data = dfffzb.query(
-    "month== @trade_year"
+    "trade_date>= @trade_year"
 )
 
 
