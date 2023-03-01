@@ -22,37 +22,39 @@ for j in range(len(i)-1):
     df2=pro.daily(ts_code=','.join(hotcode), start_date=i[j+1],end_date=i[j+1],fields='ts_code,trade_date,pct_chg')
     df1 = pd.concat([df1,df2])
 df1['market']=df1.ts_code.str[0:2]
+df1.ts_code=df1.ts_code.str[0:6]
+df1.trade_date=pd.to_datetime(df1.trade_date,format="%Y-%m-%d")
 
-df1.to_csv("./qingxi.csv",index=0,header=0,mode="a")
-df2=pd.read_csv("./qingxi.csv")
+df1.to_csv("C:\\Users\\Administrator\\Desktop\\StockAPP\\qingxi.csv",index=0,header=0,mode="a")
+df2=pd.read_csv("C:\\Users\\Administrator\\Desktop\\StockAPP\\qingxi.csv",dtype={'ts_code':str})
+df2['trade_date'] = pd.to_datetime(df2['trade_date'],format="%Y-%m-%d")
 df2=df2.sort_values("trade_date",ascending=True)
 df2=df2.drop_duplicates(subset=['trade_date','ts_code'],keep='last')
-df2.to_csv("./qingxi.csv",index=0)
+df2.to_csv("C:\\Users\\Administrator\\Desktop\\StockAPP\\qingxi.csv",index=0)
 
 name= pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,name,industry')
+name.ts_code=name.ts_code.str[0:6]
 df2=pd.merge(df2,name,left_on="ts_code",right_on="ts_code")
-dfffzb=df2.query('market=="00"|market=="60"')
+dfffzb=df2.query('market==0|market==60')
 dfffzb=dfffzb.reset_index().drop('index', axis=1, errors='ignore')
-dfffcy=df2.query('market=="30"|market=="68"')
-dfffcy=dfffcy.reset_index().drop('index', axis=1, errors='ignore')
-col1, col2 = st.columns(2)
+#dfffcy=df2.query('market==30|market==68')
+#dfffcy=dfffcy.reset_index().drop('index', axis=1, errors='ignore')
+dfffzb["year"]=dfffzb["trade_date"].dt.year
+dfffzb["month"]=dfffzb["trade_date"].dt.month
 
-with col1:
-	Chartzb = alt.Chart(dfffzb).mark_bar(color="red").encode(
-  	  x='trade_date',
-   	 y='sum(pct_chg)'
-    
-	)
-	Chartzb = Chartzb.configure_axis(title='')
-	st.altair_chart(Chartzb,use_container_width=True)
-	
-	st.dataframe(dfffzb)
-with col2:
-	Chartcy = alt.Chart(dfffcy).mark_bar(color="red").encode(
-   	 x='trade_date',
-    	y='sum(pct_chg)'
-    
-	)
-	Chartcy = Chartcy.configure_axis(title='')
-	st.altair_chart(Chartcy,use_container_width=True)
-	st.dataframe(dfffcy)
+trade_year = st.sidebar.multiselect(
+    "日期:",
+    options=dfffzb["year"].unique(),
+    default=[2022,2023]
+)
+
+
+data = dfffzb.query(
+    "year== @trade_year"
+)
+
+
+Chartzb = alt.Chart(data).mark_bar(color="red").encode(x='trade_date:T',y='sum(pct_chg)')
+Chartzb = Chartzb.configure_axis(title='')
+st.altair_chart(Chartzb,use_container_width=True)
+st.dataframe(data)
