@@ -52,7 +52,7 @@ data = dfffzb.query(
 )
 
 
-Chartzb = alt.Chart(data).mark_bar(color="red").encode(x='month(trade_date):T',y='sum(pct_chg)')
+Chartzb = alt.Chart(data).mark_bar(color="red").encode(x='date(trade_date):T',y='sum(pct_chg)')
 Chartzb = Chartzb.configure_axis(title='')
 st.altair_chart(Chartzb,use_container_width=True)
 st.dataframe(data)
